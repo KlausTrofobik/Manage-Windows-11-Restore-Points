@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestione Punti Ripristino - Presentazione</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background: #0a0a0a;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .slide {
+    width: 100%;
+    max-width: 1024px;
+    min-height: 100vh;
+    padding: 60px 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid #1e1e1e;
+  }
+  h1 { font-size: 3em; font-weight: 800; letter-spacing: -1px; background: linear-gradient(135deg, #0078d4, #00bcf2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 20px; }
+  h2 { font-size: 2em; font-weight: 700; color: #0078d4; margin-bottom: 30px; }
+  h3 { font-size: 1.3em; font-weight: 600; color: #00bcf2; margin-bottom: 15px; }
+  p, li { font-size: 1.1em; line-height: 1.7; color: #ccc; }
+  ul { list-style: none; padding: 0; }
+  li { padding: 8px 0; padding-left: 24px; position: relative; }
+  li::before { content: "▸"; position: absolute; left: 0; color: #0078d4; font-weight: 700; }
+  .badge {
+    display: inline-block; padding: 4px 14px; border-radius: 20px;
+    font-size: 0.85em; font-weight: 600; margin: 4px;
+  }
+  .badge.red { background: #e81123; color: #fff; }
+  .badge.orange { background: #ff8c00; color: #fff; }
+  .badge.green { background: #107c10; color: #fff; }
+  .badge.blue { background: #0078d4; color: #fff; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px; }
+  .card {
+    background: #1a1a1a; border-radius: 12px; padding: 25px;
+    border-left: 4px solid #0078d4;
+  }
+  .card.green { border-left-color: #107c10; }
+  .card.red { border-left-color: #e81123; }
+  .card.orange { border-left-color: #ff8c00; }
+  .card h4 { font-size: 1.1em; margin-bottom: 10px; color: #fff; }
+  .card p, .card li { font-size: 0.95em; color: #aaa; }
+  .card li::before { color: #0078d4; }
+  .stats { display: flex; gap: 30px; margin: 30px 0; flex-wrap: wrap; }
+  .stat { text-align: center; background: #1a1a1a; border-radius: 12px; padding: 25px 35px; flex: 1; min-width: 150px; }
+  .stat .num { font-size: 2.5em; font-weight: 800; }
+  .stat .num.green { color: #107c10; }
+  .stat .num.red { color: #e81123; }
+  .stat .num.orange { color: #ff8c00; }
+  .stat .label { font-size: 0.85em; color: #888; margin-top: 5px; }
+  code {
+    background: #1e1e2e; color: #c9d1d9; padding: 2px 8px;
+    border-radius: 4px; font-family: 'Consolas', monospace; font-size: 0.9em;
+  }
+  .footer { margin-top: 50px; font-size: 0.85em; color: #555; }
+  .nav { position: fixed; bottom: 30px; right: 30px; display: flex; gap: 10px; }
+  .nav a {
+    background: #0078d4; color: #fff; text-decoration: none;
+    padding: 10px 18px; border-radius: 8px; font-size: 0.9em; font-weight: 600;
+  }
+  .nav a:hover { background: #106ebe; }
+  @media (max-width: 768px) {
+    .slide { padding: 40px 30px; }
+    h1 { font-size: 2em; }
+    h2 { font-size: 1.5em; }
+    .grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <a href="#slide1">Inizio</a>
+  <a href="#slide2">Problema</a>
+  <a href="#slide4">Soluzione</a>
+  <a href="#slide6">Sicurezza</a>
+</div>
+
+<!-- SLIDE 1 - Copertina -->
+<section class="slide" id="slide1">
+  <h1>Gestione Punti di Ripristino</h1>
+  <p style="font-size:1.3em; color:#888; margin-bottom:40px;">Tool grafico per Windows 11</p>
+  <div style="display:flex; gap:15px; flex-wrap:wrap;">
+    <span class="badge blue">PowerShell 5.1+</span>
+    <span class="badge green">WinForms GUI</span>
+    <span class="badge green">Open Source</span>
+  </div>
+  <div class="footer">
+    <p>Giugno 2026</p>
+  </div>
+</section>
+
+<!-- SLIDE 2 - Problema -->
+<section class="slide" id="slide2">
+  <h2>Il Problema</h2>
+  <p style="margin-bottom:30px;">Windows non offre un'interfaccia semplice per gestire i singoli punti di ripristino.</p>
+  <div class="grid">
+    <div class="card red">
+      <h4>❌ Interfaccia nativa limitata</h4>
+      <p>Protezione Sistema permette solo di eliminare <strong>tutti</strong> i punti o crearne di nuovi. Nessuna gestione selettiva.</p>
+    </div>
+    <div class="card red">
+      <h4>❌ vssadmin complesso</h4>
+      <p>Da terminale si può, ma richiede comandi manuali e conoscenza degli UUID dei shadow copy.</p>
+    </div>
+    <div class="card red">
+      <h4>❌ Nessuna personalizzazione</h4>
+      <p>Impossibile aggiungere descrizioni significative ai punti per identificarli facilmente.</p>
+    </div>
+    <div class="card red">
+      <h4>❌ Rischio errori</h4>
+      <p>Un comando sbagliato via terminale può cancellare dati irreversibilmente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 3 - Obiettivi -->
+<section class="slide" id="slide3">
+  <h2>Obiettivi del Progetto</h2>
+  <ul>
+    <li>GUI nativa senza dipendenze esterne</li>
+    <li>Eliminazione selettiva dei punti di ripristino</li>
+    <li>Creazione guidata con un click</li>
+    <li>Descrizioni personalizzate per ogni punto</li>
+    <li>Sicurezza: niente command injection, niente vulnerabilità LPE</li>
+    <li>Funziona su Windows 10 e 11, nessuna installazione richiesta</li>
+  </ul>
+</section>
+
+<!-- SLIDE 4 - Soluzione -->
+<section class="slide" id="slide4">
+  <h2>La Soluzione</h2>
+  <div class="grid">
+    <div class="card green">
+      <h4>📋 Elenco punti</h4>
+      <p>Carica tutti i restore point da vssadmin, mostra data, descrizione e UUID in una ListView chiara.</p>
+    </div>
+    <div class="card green">
+      <h4>🗑️ Eliminazione selettiva</h4>
+      <p>Seleziona un punto e cancellalo con conferma. Validazione UUID rigida prima di ogni operazione.</p>
+    </div>
+    <div class="card green">
+      <h4>➕ Creazione</h4>
+      <p>Crea un nuovo punto con Checkpoint-Computer, operazione tracciata negli audit log.</p>
+    </div>
+    <div class="card green">
+      <h4>✏️ Descrizioni custom</h4>
+      <p>Modifica la descrizione di qualsiasi punto. Salvata in HKCU\Software (Registry protetto), non in file temporanei.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 5 - Architettura -->
+<section class="slide" id="slide5">
+  <h2>Architettura</h2>
+  <div class="card" style="margin:20px 0;">
+    <ul>
+      <li><strong>Frontend:</strong> Windows Forms (PowerShell 5.1)</li>
+      <li><strong>Backend:</strong> vssadmin.exe via System.Diagnostics.Process</li>
+      <li><strong>Storage descrizioni:</strong> Registry → <code>HKCU\Software\OttimizzaWindows\ShadowCopyDescriptions</code></li>
+      <li><strong>Audit:</strong> Windows Event Log → sorgente <code>OttimizzaWindows</code></li>
+      <li><strong>Admin check:</strong> WindowsPrincipal.IsInRole, auto-elevazione con RunAs</li>
+    </ul>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="num green">476</div><div class="label">Linee di codice</div></div>
+    <div class="stat"><div class="num green">1</div><div class="label">File (standalone)</div></div>
+    <div class="stat"><div class="num green">0</div><div class="label">Dipendenze esterne</div></div>
+  </div>
+</section>
+
+<!-- SLIDE 6 - Sicurezza -->
+<section class="slide" id="slide6">
+  <h2>Sicurezza</h2>
+  <p style="margin-bottom:20px;">Analisi statica completata — tutte le vulnerabilità corrette.</p>
+  <div class="grid">
+    <div class="card green">
+      <h4>✅ Command Injection</h4>
+      <p>Validazione UUID con regex prima di ogni chiamata. Blocco con audit log se rilevato tentativo.</p>
+    </div>
+    <div class="card green">
+      <h4>✅ niente cmd.exe</h4>
+      <p>Process.Start diretto senza shell intermedi. Nessun parsing di caratteri speciali.</p>
+    </div>
+    <div class="card green">
+      <h4>✅ niente temp file</h4>
+      <p>Descrizioni salvate nel Registry (HKCU). Nessun file in %TEMP% vulnerabile a LPE.</p>
+    </div>
+    <div class="card green">
+      <h4>✅ Timeout & Audit</h4>
+      <p>Processi vssadmin con timeout 30s. Ogni operazione tracciata su Windows Event Log.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 7 - Utilizzo -->
+<section class="slide" id="slide7">
+  <h2>Utilizzo</h2>
+  <div class="card" style="margin:20px 0;">
+    <h4>Esecuzione</h4>
+    <p style="background:#1e1e2e; padding:15px; border-radius:8px; margin:10px 0; font-family:Consolas; font-size:0.9em;">
+    .\GestionePuntiRipristino.ps1
+    </p>
+    <p style="color:#aaa;">Oppure da Explorer: tasto destro &rarr; <strong>Esegui con PowerShell</strong> (come Amministratore).</p>
+  </div>
+  <div class="grid">
+    <div class="card">
+      <h4>Requisiti</h4>
+      <ul>
+        <li>Windows 11 / Windows 10</li>
+        <li>PowerShell 5.1+</li>
+        <li>Amministratore locale</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>Licenza</h4>
+      <p style="margin-top:10px;">MIT — puoi usarlo, modificarlo e distribuirlo liberamente.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SLIDE 8 - Fine -->
+<section class="slide" id="slide8" style="text-align:center;">
+  <h1 style="font-size:3.5em;">Grazie</h1>
+  <p style="font-size:1.3em; color:#888; margin:30px 0;">Domande?</p>
+  <div class="footer">
+    <p>Gestione Punti di Ripristino — 2026</p>
+  </div>
+</section>
+
+</body>
+</html>
