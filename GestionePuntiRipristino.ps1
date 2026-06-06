@@ -136,15 +136,38 @@ function Get-ShadowCopies {
         $cimShadows = Get-CimInstance -ClassName Win32_ShadowCopy -ErrorAction Stop
         $result = @()
         foreach ($s in $cimShadows) {
+            $rawId = "$($s.ID)"
+            if ($rawId -match '^\{') { $shadowId = $rawId } else { $shadowId = "{$rawId}" }
+            $installDate = $s.InstallDate
+            $dateStr = if ($installDate -is [DateTime]) { $installDate.ToString("dd/MM/yyyy HH:mm:ss") } else { "$installDate" }
             $result += @{
-                ID   = "{$($s.ID)}"
-                Date = $s.InstallDate.ToString("dd/MM/yyyy HH:mm:ss")
+                ID   = $shadowId
+                Date = $dateStr
             }
         }
         return $result
     } catch {
         Write-Log "log.wmi_error" "Red" @($_.Exception.Message)
         return @()
+    }
+}
+
+function Update-StorageInfo {
+    try {
+        $shadowStorage = Get-CimInstance -ClassName Win32_ShadowStorage -ErrorAction Stop | Where-Object { $_.Volume -match "C:" }
+        if ($shadowStorage) {
+            $usedMB = [math]::Round($shadowStorage.UsedSpace / 1MB, 1)
+            $maxMB = [math]::Round($shadowStorage.MaxSpace / 1MB, 1)
+            $pct = if ($maxMB -gt 0) { [math]::Round(($usedMB / $maxMB) * 100, 0) } else { 0 }
+            $StorageInfo.Text = "Spazio ombre: ${usedMB}MB / ${maxMB}MB (${pct}%)"
+        } else {
+            $vol = Get-CimInstance -ClassName Win32_Volume -Filter "DriveLetter='C:'" -ErrorAction Stop
+            $freeGB = [math]::Round($vol.FreeSpace / 1GB, 1)
+            $StorageInfo.Text = "Spazio libero su C:: ${freeGB}GB"
+        }
+    } catch {
+        $StorageInfo.Text = $script:Lang["info.storage"]
+        Write-Log "log.wmi_error" "Yellow" @("StorageInfo: $($_.Exception.Message)")
     }
 }
 
@@ -344,7 +367,11 @@ $DeleteBtn.Add_Click({
         return
     }
     $selectedItem = $ListView.SelectedItem.ToString()
-    $shadowId = $selectedItem -replace ".*ID:\s*", "" -replace "\s*-.*", ""
+    if ($selectedItem -match 'ID:\s*(\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})') {
+        $shadowId = $matches[1]
+    } else {
+        $shadowId = ""
+    }
     if (-not (Validate-ShadowId $shadowId)) {
         Write-AuditLog -Action "SECURITY" -Details "Tentativo command injection bloccato: $shadowId"
         [System.Windows.Forms.MessageBox]::Show($script:Lang["msg.invalid_id"], $script:Lang["msg.security_error"],
@@ -352,8 +379,8 @@ $DeleteBtn.Add_Click({
         Write-Log "log.security_block" "Red" @($shadowId)
         return
     }
-    $shadowDate = $selectedItem -replace ".*Data:\s*", "" -replace "\s*-.*", ""
-    $description = $selectedItem -replace ".*Descrizione:\s*", ""
+    if ($selectedItem -match 'Data:\s*([\d/:\s]+?)\s*-\s*Descrizione') { $shadowDate = $matches[1].Trim() } else { $shadowDate = "" }
+    if ($selectedItem -match 'Descrizione:\s*(.*?)\s*-\s*ID:\s*\{') { $description = $matches[1].Trim() } else { $description = "" }
     $confirmText = $script:Lang["msg.confirm_delete_text"]
     $result = [System.Windows.Forms.MessageBox]::Show(
         "$confirmText`n`nData: $shadowDate`nDescrizione: $description`nID: $shadowId",
@@ -445,7 +472,11 @@ $EditDescriptionBtn.Add_Click({
         return
     }
     $selectedItem = $ListView.SelectedItem.ToString()
-    $shadowId = $selectedItem -replace ".*ID:\s*", "" -replace "\s*-.*", ""
+    if ($selectedItem -match 'ID:\s*(\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})') {
+        $shadowId = $matches[1]
+    } else {
+        $shadowId = ""
+    }
     if (-not (Validate-ShadowId $shadowId)) {
         [System.Windows.Forms.MessageBox]::Show($script:Lang["msg.invalid_id"], $script:Lang["msg.error"],
             [System.Windows.Forms.MessageBoxButtons]::OK, [System.Windows.Forms.MessageBoxIcon]::Error)
@@ -554,6 +585,7 @@ function Load-RestorePoints {
         Write-Log "log.item_added" "Green" @($count, $s.Date)
     }
     Write-Log "log.loaded" "Green" @($count)
+    Update-StorageInfo
 }
 
 Load-RestorePoints
