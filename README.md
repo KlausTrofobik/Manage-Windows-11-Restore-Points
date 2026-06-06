@@ -1,39 +1,39 @@
 # GestionePuntiRipristino
 
-Tool grafico per Windows 11 che permette di creare, visualizzare, modificare ed eliminare punti di ripristino del sistema.
+Graphical tool for Windows 11 to create, view, modify and delete system restore points.
 
-## Requisiti
+## Requirements
 
-- **Windows 11** (funziona anche su Windows 10)
+- **Windows 11** (also works on Windows 10)
 - **PowerShell 5.1+**
-- **Esecuzione come Amministratore** (necessaria per interagire con Volume Shadow Copy)
+- **Run as Administrator** (required for Volume Shadow Copy interaction)
 
-## Installazione
+## Installation
 
-Scarica `GestionePuntiRipristino.ps1` ed eseguilo come Amministratore:
+Download `GestionePuntiRipristino.ps1` and run as Administrator:
 
 ```powershell
 .\GestionePuntiRipristino.ps1
 ```
 
-Oppure da Explorer: tasto destro → **Esegui con PowerShell**.
+Or from Explorer: right-click → **Run with PowerShell**.
 
-## Funzionalità
+## Features
 
-- **Elenco punti di ripristino** — mostra tutti i punti esistenti con data e descrizione
-- **Eliminazione** — rimuove un punto specifico con conferma
-- **Creazione** — crea un nuovo punto di ripristino
-- **Modifica descrizione** — personalizza la descrizione dei punti (salvata in HKCU\Software\OttimizzaWindows)
-- **Avvia Ripristino Sistema** — apre l'interfaccia nativa di Windows (`rstrui.exe`)
+- **List restore points** — shows all existing points with date and description
+- **Delete** — removes a specific point with confirmation
+- **Create** — creates a new restore point
+- **Edit description** — customize point descriptions (saved in HKCU\Software\OttimizzaWindows)
+- **Launch System Restore** — opens the native Windows interface (`rstrui.exe`)
 
-## Sicurezza
+## Security
 
-- Validazione UUID rigida prima di ogni operazione con `vssadmin`
-- Processi eseguiti con `Process.Start` senza shell intermedi
-- Timeout massimo di 30 secondi per evitare blocchi
-- Audit logging su Windows Event Log (sorgente: `OttimizzaWindows`)
-- Descrizioni salvate nel Registry (HKCU), non in file temporanei
+- Strict UUID validation before every `vssadmin` operation
+- Processes run via `Process.Start` without shell intermediaries
+- 30-second timeout prevents hangs
+- Audit logging to Windows Event Log (source: `OttimizzaWindows`)
+- Descriptions stored in Registry (HKCU), not temp files
 
-## Licenza
+## License
 
 MIT
